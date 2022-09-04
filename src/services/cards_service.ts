@@ -1,8 +1,10 @@
 import * as cardRepository from "../repositories/card_repository";
-import { Company } from "../repositories/company_repository";
+import * as paymentRepository from "../repositories/payment_repository";
+import * as rechargeRepository from "../repositories/recharge_repository";
 import { Employee } from "../repositories/employee_repository";
 import { Transactions } from "../utils/type_enum";
 import { faker } from "@faker-js/faker";
+import bcrypt from "bcrypt";
 import crypt from "cryptr";
 
 const cryptr = new crypt("meuEncryptador");
@@ -26,6 +28,43 @@ export async function createCard(employee: Employee, type: cardRepository.Transa
         type: type
     };
     await cardRepository.insert(card);
+}
+
+export async function activateCard(card: cardRepository.Card, cvv: string, password: string) {
+    const cardData: cardRepository.CardUpdateData = { securityCode: cvv, password: hashPassword(password) };
+    if (card.password != "" && card.password != null) throw "ALREADY_ACTIVATED";
+    if (cvv != decryptCVV(card.securityCode)) throw "NOT_MATCH";
+    if (password.length != 4) throw "INVALID_PASSWORD";
+
+    await cardRepository.update(card.id, cardData);
+}
+
+export async function getCardTransactions(cardId: number) {
+
+    const recharges = await getCardRecharges(cardId);
+    const transactions = await getCardPayments(cardId);
+
+    const totalRecharges = recharges.reduce((a, b) => a + b.amount, 0);
+    const totalPayments = transactions.reduce((a, b) => a + b.amount, 0);
+
+    return {
+        balance: totalRecharges - totalPayments,
+        transactions: transactions,
+        recharges: recharges,
+    };
+}
+
+async function getCardRecharges(cardId: number) {
+    const recharges: rechargeRepository.Recharge[] = await rechargeRepository.findByCardId(cardId);
+    return recharges;
+}
+async function getCardPayments(cardId: number) {
+    const payments: paymentRepository.PaymentWithBusinessName[] = await paymentRepository.findByCardId(cardId);
+    return payments;
+}
+
+function hashPassword(password: string) {
+    return bcrypt.hashSync(password, 8);
 }
 
 function cryptCVV(cvv: string) {

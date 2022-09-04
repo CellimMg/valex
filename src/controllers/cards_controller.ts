@@ -35,3 +35,37 @@ export async function createCard(req: Request, res: Response) {
         }
     }
 }
+
+
+export async function activateCard(req: Request, res: Response) {
+    try {
+        const { cvv, password } = req.body;
+        await cardsService.activateCard(res.locals.card, cvv, password);
+    } catch (error) {
+        console.log(error);
+        switch (error) {
+            case "NOT_MATCH":
+                return res.status(400).send({ message: "Código de segurança inválido!" });
+            case "INVALID_PASSWORD":
+                return res.status(400).send({ message: "A senha deve possuir 4 dígitos!" });
+            case "ALREADY_ACTIVATED":
+                return res.status(400).send({ message: "O cartão ja está ativado!" });
+            default:
+                return res.sendStatus(500);
+        }
+    }
+}
+
+export async function getCardTransactions(req: Request, res: Response) {
+    try {
+        const card: Card = res.locals.card;
+        const transactions = await cardsService.getCardTransactions(card.id);
+        return res.status(200).send(transactions);
+    } catch (error) {
+        console.log(error);
+        switch (error) {
+            default:
+                return res.sendStatus(500);
+        }
+    }
+}
