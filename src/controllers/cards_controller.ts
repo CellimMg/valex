@@ -56,6 +56,37 @@ export async function activateCard(req: Request, res: Response) {
     }
 }
 
+export async function blockCard(req: Request, res: Response) {
+    try {
+        const card: Card = res.locals.card;
+        const transactions = await cardsService.blockCard(card);
+        return res.status(200).send(transactions);
+    } catch (error) {
+        console.log(error);
+        switch (error) {
+            case "ALREADY_BLOCKED":
+                return res.status(400).send({ message: "O cartão ja está bloqueado!" });
+            default:
+                return res.sendStatus(500);
+        }
+    }
+}
+export async function unblockCard(req: Request, res: Response) {
+    try {
+        const card: Card = res.locals.card;
+        const transactions = await cardsService.unblockCard(card);
+        return res.status(200).send(transactions);
+    } catch (error) {
+        console.log(error);
+        switch (error) {
+            case "ALREADY_UNBLOCKED":
+                return res.status(400).send({ message: "O cartão ja está desbloqueado!" });
+            default:
+                return res.sendStatus(500);
+        }
+    }
+}
+
 export async function getCardTransactions(req: Request, res: Response) {
     try {
         const card: Card = res.locals.card;

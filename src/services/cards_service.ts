@@ -54,6 +54,16 @@ export async function getCardTransactions(cardId: number) {
     };
 }
 
+export async function blockCard(card: cardRepository.Card) {
+    if (card.isBlocked) throw "ALREADY_BLOCKED";
+    await cardRepository.update(card.id, { isBlocked: true });
+}
+
+export async function unblockCard(card: cardRepository.Card) {
+    if (card.isBlocked) throw "ALREADY_UNBLOCKED";
+    await cardRepository.update(card.id, { isBlocked: false });
+}
+
 async function getCardRecharges(cardId: number) {
     const recharges: rechargeRepository.Recharge[] = await rechargeRepository.findByCardId(cardId);
     return recharges;
