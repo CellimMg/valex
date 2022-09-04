@@ -42,8 +42,7 @@ function getCVV(): string {
 
 function getExpireDate(): string {
     const currentDate = new Date;
-    return `${currentDate.getMonth().toString().padStart(2, "0")}/
-        ${(currentDate.getFullYear() + 5).toString().substring(-2)}`;
+    return `${currentDate.toLocaleDateString().split("/")[1]}/${(currentDate.getFullYear() + 5).toString().substring(2)}`;
 }
 
 function getCardNumber(): string {
@@ -54,10 +53,10 @@ function getHolderName(name: string): string {
     const nameAsList = name.split(" ");
     const nameFormated = [];
     for (let i = 0; i < nameAsList.length; i++) {
-        if (i == 9 || i == nameAsList.length - 1) {
+        if (i == 0 || i == nameAsList.length - 1) {
             nameFormated.push(nameAsList[i]);
         } else {
-            if (nameAsList[i].length >= 3) nameFormated.push(nameAsList[i]);
+            if (nameAsList[i].length >= 3) nameFormated.push(nameAsList[i][0]);
         }
     }
     return nameFormated.join(" ");
