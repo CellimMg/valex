@@ -3,7 +3,7 @@ import * as cardRepository from "../repositories/card_repository";
 
 export async function cardExpirationValidate(req: Request, res: Response, next: NextFunction) {
     const card: cardRepository.Card = res.locals.card;
-    if (isExpired(card.expirationDate)) return res.status(400).send({ message: "O cartão já está expirado!" });;
+    if (isExpired(card.expirationDate)) return res.status(204).send({ message: "O cartão já está expirado!" });;
     next();
 }
 

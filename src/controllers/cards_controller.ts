@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import * as companiesService from "../services/companies_service";
 import * as employeesService from "../services/employees_service";
 import * as cardsService from "../services/cards_service";
-import { Company } from "../repositories/company_repository";
 import { Employee } from "../repositories/employee_repository";
 import { Card, TransactionTypes } from "../repositories/card_repository";
 
@@ -29,7 +28,7 @@ export async function createCard(req: Request, res: Response) {
             case "EMPLOYEE_NOT_FOUND":
                 return res.status(404).send({ message: "Usuário não encontrado!" });
             case "COMPANY_NOT_FOUND":
-                return res.status(404).send({ message: "Empresa não encontrado!" });
+                return res.status(401).send({ message: "Chave api inválida!" });
             default:
                 return res.sendStatus(500);
         }
@@ -47,7 +46,7 @@ export async function activateCard(req: Request, res: Response) {
             case "NOT_MATCH":
                 return res.status(400).send({ message: "Código de segurança inválido!" });
             case "INVALID_PASSWORD":
-                return res.status(400).send({ message: "A senha deve possuir 4 dígitos!" });
+                return res.status(422).send({ message: "A senha deve possuir 4 dígitos!" });
             case "ALREADY_ACTIVATED":
                 return res.status(400).send({ message: "O cartão ja está ativado!" });
             default:
@@ -59,8 +58,8 @@ export async function activateCard(req: Request, res: Response) {
 export async function blockCard(req: Request, res: Response) {
     try {
         const card: Card = res.locals.card;
-        const transactions = await cardsService.blockCard(card);
-        return res.status(200).send(transactions);
+        await cardsService.blockCard(card);
+        return res.status(200);
     } catch (error) {
         console.log(error);
         switch (error) {
@@ -74,8 +73,8 @@ export async function blockCard(req: Request, res: Response) {
 export async function unblockCard(req: Request, res: Response) {
     try {
         const card: Card = res.locals.card;
-        const transactions = await cardsService.unblockCard(card);
-        return res.status(200).send(transactions);
+        await cardsService.unblockCard(card);
+        return res.status(200);
     } catch (error) {
         console.log(error);
         switch (error) {

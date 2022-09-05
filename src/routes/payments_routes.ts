@@ -6,6 +6,6 @@ import { cardValidation } from "../middlewares/card_validation_middleware";
 
 const paymentsRouter = Router();
 
-paymentsRouter.post("/payment", cardValidation, cardExpirationValidate, cardPasswordValidation, createPayment);
+paymentsRouter.post("/payment/:idCard", cardValidation, cardExpirationValidate, cardPasswordValidation, createPayment);
 
 export default paymentsRouter;

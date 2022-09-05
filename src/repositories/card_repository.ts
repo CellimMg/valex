@@ -108,7 +108,7 @@ export async function update(id: number, cardData: CardUpdateData) {
       object: cardData,
       offset: 2,
     });
-
+  console.log(cardColumns);
   connection.query(
     `
     UPDATE cards

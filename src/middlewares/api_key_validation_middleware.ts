@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 export async function validateApiKey(req: Request, res: Response, next: NextFunction) {
     try {
         const apiKey: string | undefined = req.header("x-api-key");
-        if (!apiKey) return res.sendStatus(400);
+        if (!apiKey) return res.sendStatus(422);
         res.locals.apiKey = apiKey;
         next();
     } catch (error) {

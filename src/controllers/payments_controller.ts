@@ -16,11 +16,11 @@ export async function createPayment(req: Request, res: Response) {
     } catch (error) {
         switch (error) {
             case "NOT_FOUND":
-                return res.status(400).send({ message: "Este estabelecimento não está cadastrado!" });
+                return res.status(404).send({ message: "Este estabelecimento não está cadastrado!" });
             case "CARD_BLOCKED":
                 return res.status(400).send({ message: "O cartão está bloqueado!" });
             case "NOT_ALLOWED":
-                return res.status(400).send({ message: "Cartão não autorizado para este tipo de transação!" });
+                return res.status(401).send({ message: "Cartão não autorizado para este tipo de transação!" });
             case "INSUFICIENT_FUNDS":
                 return res.status(400).send({ message: "Saldo insuficiente!" });
             default:

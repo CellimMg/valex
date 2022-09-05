@@ -6,7 +6,6 @@ import { cardValidation } from "../middlewares/card_validation_middleware";
 
 const rechargesRouter = Router();
 
-
-rechargesRouter.post("/recharge", validateApiKey, cardValidation, cardExpirationValidate, createRecharge);
+rechargesRouter.post("/recharge/:idCard", validateApiKey, cardValidation, cardExpirationValidate, createRecharge);
 
 export default rechargesRouter;

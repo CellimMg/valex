@@ -31,12 +31,12 @@ export async function createCard(employee: Employee, type: cardRepository.Transa
 }
 
 export async function activateCard(card: cardRepository.Card, cvv: string, password: string) {
-    const cardData: cardRepository.CardUpdateData = { securityCode: cvv, password: hashPassword(password) };
+    console.log(decryptCVV(card.securityCode));
     if (card.password != "" && card.password != null) throw "ALREADY_ACTIVATED";
     if (cvv != decryptCVV(card.securityCode)) throw "NOT_MATCH";
     if (password.length != 4) throw "INVALID_PASSWORD";
 
-    await cardRepository.update(card.id, cardData);
+    await cardRepository.update(card.id, { securityCode: cvv, password: hashPassword(password) });
 }
 
 export async function getCardTransactions(cardId: number) {
