@@ -12,7 +12,7 @@ export async function createPayment(req: Request, res: Response) {
 
         await makePayment(card, businessId, amount);
 
-        return res.status(200);
+        return res.sendStatus(201);
     } catch (error) {
         switch (error) {
             case "NOT_FOUND":

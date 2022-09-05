@@ -9,7 +9,6 @@ import crypt from "cryptr";
 
 const cryptr = new crypt("meuEncryptador");
 
-
 export async function getCardByTypeAndEmployeeId(employeeId: number, type: cardRepository.TransactionTypes) {
     if (!isValidType(type)) throw "INVALID_TYPE";
     const card = await cardRepository.findByTypeAndEmployeeId(type, employeeId);
@@ -36,7 +35,7 @@ export async function activateCard(card: cardRepository.Card, cvv: string, passw
     if (cvv != decryptCVV(card.securityCode)) throw "NOT_MATCH";
     if (password.length != 4) throw "INVALID_PASSWORD";
 
-    await cardRepository.update(card.id, { securityCode: cvv, password: hashPassword(password) });
+    await cardRepository.update(card.id, { password: hashPassword(password) });
 }
 
 export async function getCardTransactions(cardId: number) {
@@ -60,7 +59,7 @@ export async function blockCard(card: cardRepository.Card) {
 }
 
 export async function unblockCard(card: cardRepository.Card) {
-    if (card.isBlocked) throw "ALREADY_UNBLOCKED";
+    if (!card.isBlocked) throw "ALREADY_UNBLOCKED";
     await cardRepository.update(card.id, { isBlocked: false });
 }
 

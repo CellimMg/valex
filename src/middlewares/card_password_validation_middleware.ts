@@ -9,4 +9,4 @@ export async function cardPasswordValidation(req: Request, res: Response, next: 
     if (!bcrypt.compareSync(password, card.password!)) return res.status(400).send({ message: "Ops! A senha do cartão está incorreta!" });
 
     next();
-}
+}   
