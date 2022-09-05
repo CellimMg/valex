@@ -6,9 +6,11 @@ export function schemaValidate(schema: joi.ObjectSchema) {
         try {
             const body = req.body;
 
-            const error = schema.validate(body);
+            const { error } = schema.validate(body);
 
-            if (error) return res.status(422).send({ message: error });
+            console.log(error);
+
+            if (error) return res.status(422).send({ message: error?.details[0].message });
 
             next();
         } catch (error) {
