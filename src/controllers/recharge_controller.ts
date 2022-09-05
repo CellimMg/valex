@@ -13,6 +13,8 @@ export async function createRecharge(req: Request, res: Response) {
     } catch (error) {
         console.log(error);
         switch (error) {
+            case "NOT_ACTIVATED":
+                return res.status(400).send({ message: "O cartão não está ativado!" });
             default:
                 return res.sendStatus(500);
         }

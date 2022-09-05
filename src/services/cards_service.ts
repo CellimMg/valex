@@ -64,11 +64,13 @@ export async function unblockCard(card: cardRepository.Card) {
     await cardRepository.update(card.id, { isBlocked: false });
 }
 
-async function getCardRecharges(cardId: number) {
+
+export async function getCardRecharges(cardId: number) {
     const recharges: rechargeRepository.Recharge[] = await rechargeRepository.findByCardId(cardId);
     return recharges;
 }
-async function getCardPayments(cardId: number) {
+
+export async function getCardPayments(cardId: number) {
     const payments: paymentRepository.PaymentWithBusinessName[] = await paymentRepository.findByCardId(cardId);
     return payments;
 }
