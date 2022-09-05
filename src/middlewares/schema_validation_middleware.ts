@@ -8,8 +8,6 @@ export function schemaValidate(schema: joi.ObjectSchema) {
 
             const { error } = schema.validate(body);
 
-            console.log(error);
-
             if (error) return res.status(422).send({ message: error?.details[0].message });
 
             next();

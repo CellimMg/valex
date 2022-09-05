@@ -74,6 +74,10 @@ export async function getCardPayments(cardId: number) {
     return payments;
 }
 
+export function isActivated(card: cardRepository.Card) {
+    return card.password != "" && card.password != null;
+}
+
 function hashPassword(password: string) {
     return bcrypt.hashSync(password, 8);
 }
