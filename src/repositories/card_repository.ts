@@ -1,9 +1,9 @@
-import { connection } from "../database.js";
-import { mapObjectToUpdateQuery } from "../utils/sqlUtils.js";
+import connection from "../database/postgres";
+import { mapObjectToUpdateQuery } from "../utils/sqlUtils";
 
 export type TransactionTypes =
   | "groceries"
-  | "restaurant"
+  | "restaurants"
   | "transport"
   | "education"
   | "health";
@@ -108,7 +108,7 @@ export async function update(id: number, cardData: CardUpdateData) {
       object: cardData,
       offset: 2,
     });
-
+  console.log(cardColumns);
   connection.query(
     `
     UPDATE cards
