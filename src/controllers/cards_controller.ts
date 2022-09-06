@@ -40,6 +40,7 @@ export async function activateCard(req: Request, res: Response) {
     try {
         const { cvv, password } = req.body;
         await cardsService.activateCard(res.locals.card, cvv, password);
+        return res.sendStatus(200);
     } catch (error) {
         console.log(error);
         switch (error) {
@@ -59,7 +60,7 @@ export async function blockCard(req: Request, res: Response) {
     try {
         const card: Card = res.locals.card;
         await cardsService.blockCard(card);
-        return res.status(200);
+        return res.sendStatus(200);
     } catch (error) {
         console.log(error);
         switch (error) {
@@ -74,7 +75,7 @@ export async function unblockCard(req: Request, res: Response) {
     try {
         const card: Card = res.locals.card;
         await cardsService.unblockCard(card);
-        return res.status(200);
+        return res.sendStatus(200);
     } catch (error) {
         console.log(error);
         switch (error) {

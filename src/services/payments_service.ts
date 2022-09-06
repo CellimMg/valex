@@ -15,7 +15,7 @@ export async function makePayment(card: Card, businessId: number, amount: number
     const totalRecharges = recharges.reduce((a, b) => a + b.amount, 0);
     const totalPayments = transactions.reduce((a, b) => a + b.amount, 0);
 
-    if (amount < (totalRecharges - totalPayments)) throw "INSUFICIENT_FUNDS";
+    if (amount > (totalRecharges - totalPayments)) throw "INSUFICIENT_FUNDS";
 
     await insert({ amount: amount, businessId: businessId, cardId: card.id });
 

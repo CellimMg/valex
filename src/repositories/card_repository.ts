@@ -108,12 +108,11 @@ export async function update(id: number, cardData: CardUpdateData) {
       object: cardData,
       offset: 2,
     });
-  console.log(cardColumns);
   connection.query(
     `
     UPDATE cards
       SET ${cardColumns}
-    WHERE $1=id
+    WHERE cards.id=$1
   `,
     [id, ...cardValues]
   );
